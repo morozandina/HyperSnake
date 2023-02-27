@@ -602,7 +602,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
@@ -619,7 +619,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
   m_Name: 
@@ -691,7 +691,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &963370405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -777,89 +777,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!1 &1153875215
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1153875216}
-  - component: {fileID: 1153875218}
-  - component: {fileID: 1153875217}
-  m_Layer: 7
-  m_Name: Shadow
-  m_TagString: Planet
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1153875216
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1153875215}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 30, y: 30, z: 30}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1881697279}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &1153875217
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1153875215}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 5c0cc32ffb55c4bd2b90a482ec64b5da, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1153875218
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1153875215}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1323881292
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,7 +1171,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 230559127}
-  - {fileID: 1153875216}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1270,83 +1186,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aea9036420fde425684508fc4f04aff6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnerObjects:
-  - name: Grass
-    spawnPrefabs:
-    - {fileID: 3637134996410867462, guid: 9c6178fe943216540b276b975dafae16, type: 3}
-    - {fileID: 5707813131339405077, guid: b995a96a7ca36d04b851e46870b5aadf, type: 3}
-    - {fileID: 1810836374240917309, guid: 962996e23ffcbc44d92fb20cd03940cd, type: 3}
-    spawnCountMix: 50
-    spawnCountMax: 150
-  - name: Tree
-    spawnPrefabs:
-    - {fileID: 8758888183437167707, guid: 2caeb99d3229fee4aa4f3bc8c1c8fc07, type: 3}
-    - {fileID: 2035405497521452412, guid: d76f8cf6d6d23834d97c23574821f38e, type: 3}
-    - {fileID: 6759448882052246062, guid: 9787e9e0fbeb87a45beb0d9d4e03edca, type: 3}
-    - {fileID: 4241147409563934762, guid: 4b4ea87231b37c148abee861d3c0001e, type: 3}
-    spawnCountMix: 20
-    spawnCountMax: 75
-  - name: Rocks Non Collision
-    spawnPrefabs:
-    - {fileID: 8773559230599131034, guid: 31232690b2ebf4bd1b5be88f152a8038, type: 3}
-    - {fileID: 3494387937385803408, guid: b1651ff6fc06f4f8aa4454963a5b9f11, type: 3}
-    - {fileID: 6623322536794494322, guid: 11d3e653e54ef4a1893315cf7981906a, type: 3}
-    - {fileID: 6847250593133879185, guid: 3913331b3c78e46079ce414dd58b5f16, type: 3}
-    - {fileID: 4007012575195229809, guid: 94e4338e0849c4f0f82b1894a6e5af30, type: 3}
-    - {fileID: 8230755883805897503, guid: 024916e9428db4c65aed06cd294b499b, type: 3}
-    - {fileID: 2932635117171082441, guid: a95e616d10f8149349cfc51140704548, type: 3}
-    - {fileID: 5667653006965837427, guid: cb9d1b6157f314bf9b2c224b4eac2d0e, type: 3}
-    - {fileID: 8516122266431299335, guid: 2262d179e669742a0805dd221ef40281, type: 3}
-    - {fileID: 1265771667936181318, guid: e551dc3e27e244809af63f70cad5102d, type: 3}
-    - {fileID: 5967158637992527150, guid: eb4da92db01d74282a08bc1295ad2299, type: 3}
-    - {fileID: 2638998266833134134, guid: e9b4f0884157e4785bde4375d7679063, type: 3}
-    - {fileID: 5753183428063365360, guid: 6eb01f7cd2ed94e2abec864c7530289c, type: 3}
-    - {fileID: 7844871731282401226, guid: 879b1839ddfcd45f7976401634922c87, type: 3}
-    - {fileID: 8353707413807137834, guid: fa96adfeefe09407b983c91818c15dbf, type: 3}
-    - {fileID: 8104668985435046675, guid: e197ebe8cf0aa4ac9bdff3ab0bd5c8ff, type: 3}
-    - {fileID: 3015871294472904989, guid: 1d9e09eb68bf1440e8e96ba28da697ea, type: 3}
-    - {fileID: 4534089634553796310, guid: 3920db7248a444ae1be1c53c1b32fb91, type: 3}
-    - {fileID: 897790050089631530, guid: 57cbd5b8f3d7b43e19b9b739cd5f913b, type: 3}
-    - {fileID: 4497746932647444271, guid: 54a348f617d2e49cc8dfe95621cfeb16, type: 3}
-    - {fileID: 1182559860280764832, guid: 9da9dbe7794df4caaa32f1eb39656280, type: 3}
-    - {fileID: 6372919895844820677, guid: 643536a31cc114d7bbd09dc6aa892c6b, type: 3}
-    - {fileID: 8603092655737271561, guid: b0b4ec302ec6d4072b486f81bb408e70, type: 3}
-    - {fileID: 3337788169767996859, guid: d80819672353a4f80a7bb95acb7d1961, type: 3}
-    - {fileID: 2790513851682725784, guid: fade102fa3df74b1a96655260eaba984, type: 3}
-    spawnCountMix: 50
-    spawnCountMax: 100
-  - name: Wall
-    spawnPrefabs:
-    - {fileID: 6710887551023593910, guid: b7abbdfec75e74327b4749b0c9767a26, type: 3}
-    - {fileID: 444092515010001675, guid: 0945c7c7520ba45b58b4c4da6cc08c03, type: 3}
-    - {fileID: 7550172663103512122, guid: b7f518b04d38d4a89a9468aac8c8fd64, type: 3}
-    - {fileID: 1919623167910358755, guid: 3ed83e1df7ac14e0aba5bba800504d6f, type: 3}
-    - {fileID: 6040278497104518673, guid: 3359a87055df64c0ca88136d1c92397d, type: 3}
-    - {fileID: 2161537939182461800, guid: 45462b3c647d54a0aa2727f3598b5cc3, type: 3}
-    - {fileID: 3488933100660228098, guid: 9a6cf030a95984e90afefb0750ce69ff, type: 3}
-    spawnCountMix: 5
-    spawnCountMax: 15
-  - name: Rock Simple
-    spawnPrefabs:
-    - {fileID: 2884942919030945719, guid: 93a8ad69c8980439d815e3779a385ffe, type: 3}
-    - {fileID: 968896741907932227, guid: 99c92e7e310144e84b380974f7daa929, type: 3}
-    - {fileID: 7444488756044101935, guid: 464486ef98ec04c969d63d084ca56e75, type: 3}
-    - {fileID: 2183339997466777926, guid: 1a25c712b100442549c20bae11dba1c4, type: 3}
-    - {fileID: 7947801170828914766, guid: 314b2d06f5c4c4e899bb84ad9875d355, type: 3}
-    - {fileID: 2570439435056044282, guid: 100020970ff0847c4bf5413f65865740, type: 3}
-    - {fileID: 3561395237654919293, guid: 11e1e4efef8274c8885418378a5efbdc, type: 3}
-    - {fileID: 2674892787082217623, guid: 45c918e777c054d828fcee16d914016e, type: 3}
-    - {fileID: 1815150203875196046, guid: dc01c8879bcf4404893c0df3d69fe5d4, type: 3}
-    - {fileID: 7803495657876999782, guid: 0a7b8f013f56e4e46a99767293808b72, type: 3}
-    - {fileID: 4471812949306899435, guid: 6cc4cbfe46afa414d82acaf0a7ce6bf3, type: 3}
-    - {fileID: 6391841874646865197, guid: d38d84c49f8fb4083b327afdcc7b4cb6, type: 3}
-    - {fileID: 2887437870019467599, guid: cb134d81321614076900a6ab4afbc483, type: 3}
-    - {fileID: 822515569208250629, guid: cb49a5f78b9184f9aad89980bfd3057c, type: 3}
-    - {fileID: 3040871269220224746, guid: 6ff180f268c1a4fbd9d1ce92245f8e25, type: 3}
-    - {fileID: 6124489989184311917, guid: a04601d80f3ef4c29936ece1668ec9c6, type: 3}
-    - {fileID: 2844997029458049730, guid: b3b7d16eecbc84a12bd9bad0ec7fee36, type: 3}
-    - {fileID: 295304636238917127, guid: 08ff9528bc2ab4570b540c4bc045c8f3, type: 3}
-    - {fileID: 5377097665709150728, guid: 15b512f7d52d44ae6b9197a7914411f0, type: 3}
-    spawnCountMix: 30
-    spawnCountMax: 70
   apple: {fileID: 3165726088945663998, guid: 4412a0c685e974b90ad1d54c2c49a3c5, type: 3}

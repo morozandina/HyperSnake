@@ -13,4 +13,12 @@ namespace Game.Spawner
         public int spawnCountMax;
         public int GetSpawnCount => Random.Range(spawnCountMix, spawnCountMax);
     }
+
+    [CreateAssetMenu(fileName = "PlanetSettings", menuName = "Planet/New Planet Settings", order = 1)]
+    public class PlanetSettings : ScriptableObject
+    {
+        public string planetName;
+        public List<Color> planetColors;
+        public List<SpawnerObject> spawnerObjects;
+    }
 }

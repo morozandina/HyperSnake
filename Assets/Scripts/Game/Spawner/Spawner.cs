@@ -10,7 +10,6 @@ namespace Game.Spawner
     {
         public static Action AppleSpawn;
         private Transform _planet;
-        public List<SpawnerObject> spawnerObjects = new List<SpawnerObject>();
         public GameObject apple;
 
         private void Awake()
@@ -28,9 +27,9 @@ namespace Game.Spawner
 
         private void StartSpawn()
         {
-            foreach (var spawner in spawnerObjects)
-                for (var i = 0; i <= spawner.GetSpawnCount; i++)
-                    SpawnPrefab(spawner.spawnPrefabs);
+            // foreach (var spawner in spawnerObjects)
+            //     for (var i = 0; i <= spawner.GetSpawnCount; i++)
+            //         SpawnPrefab(spawner.spawnPrefabs);
 
             SpawnApple();
         }
