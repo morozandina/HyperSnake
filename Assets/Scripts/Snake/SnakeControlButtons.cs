@@ -4,31 +4,40 @@ using UnityEngine.EventSystems;
 
 namespace Snake
 {
-    public class SnakeControlButtons : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
+    [Serializable]
+    public enum MoveType
     {
+        Left,
+        Jump,
+        Right
+    }
+    public class SnakeControlButtons : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    {
+        public MoveType moveType;
         private bool _isHandle = false;
 
         private void FixedUpdate()
         {
             if (!_isHandle)
                 return;
-
-            var halfScreen = Screen.width / 2;
-            var xPos = (Input.mousePosition.x - halfScreen) / halfScreen;
-            var val = Mathf.Clamp(xPos * 3.2f, -1f, 1f);
             
-            if (val != 0)
-                StyledSnakeControl.rotationValue?.Invoke(val);
+            switch (moveType)
+            {
+                case MoveType.Left:
+                    StyledSnakeControl.rotationValue?.Invoke(-1);
+                    break;
+                case MoveType.Jump:
+                    StyledSnakeControl.jumpSnake?.Invoke();
+                    _isHandle = false;
+                    break;
+                case MoveType.Right:
+                    StyledSnakeControl.rotationValue?.Invoke(1);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (!_isHandle)
-                StyledSnakeControl.jumpSnake?.Invoke();
-        }
-        // Drag with move
-        public void OnBeginDrag(PointerEventData eventData) => _isHandle = true;
-        public void OnDrag(PointerEventData eventData) { }
-        public void OnEndDrag(PointerEventData eventData) => _isHandle = false;
+        public void OnPointerDown(PointerEventData eventData) => _isHandle = true;
+        public void OnPointerUp(PointerEventData eventData) => _isHandle = false;
     }
 }

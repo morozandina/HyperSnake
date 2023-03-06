@@ -8,6 +8,7 @@ TagManager:
   - Obstacle
   - Tail
   - Apple
+  - ObstacleDestroy
   layers:
   - Default
   - TransparentFX

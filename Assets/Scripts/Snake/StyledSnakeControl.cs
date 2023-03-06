@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.Spawner;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Snake
 {
@@ -26,8 +27,8 @@ namespace Snake
 
         [Header("SNAKE: ")]
         public GameObject bodyPrefab;
-        public int gap;
-        public float bodySpeed = 5;
+        public float gap;
+        public float bodySpeed = 4;
         private List<GameObject> _bodyParts = new List<GameObject>();
         private List<Vector3> _positionHistory = new List<Vector3>();
 
@@ -35,14 +36,18 @@ namespace Snake
         [SerializeField] private ParticleSystem eatFx;
         [SerializeField] private ParticleSystem snakeDestroyFx;
         [SerializeField] private ParticleSystem objectDestroyFx;
+        [SerializeField] private ParticleSystem shieldFx;
 
         private bool _isDead;
+        private bool _isCanBreak;
 
 
         private void Awake() {
             _rigidbody = GetComponent<Rigidbody>();
             rotationValue += Rotate;
             jumpSnake += Jump;
+
+            StartCoroutine(Shield(3));
         }
 
         private void OnDestroy()
@@ -117,7 +122,7 @@ namespace Snake
             var index = 0;
             foreach (var body in _bodyParts)
             {
-                var point = _positionHistory[Mathf.Min(index * gap, _positionHistory.Count - 1)];
+                var point = _positionHistory[Mathf.Min(index * (int)gap, _positionHistory.Count - 1)];
                 var moveDirection = point - body.transform.position;
                 body.transform.position += moveDirection * bodySpeed * Time.deltaTime;
                 body.transform.LookAt(point);
@@ -137,20 +142,29 @@ namespace Snake
                 Destroy(collision.gameObject);
                 GrowSnake();
                 Spawner.AppleSpawn?.Invoke();
-                walkSpeed += .1f;
+                walkSpeed += .01f;
+                bodySpeed += .01f;
+                gap += .01f;
             }
-
-            if (collision.gameObject.CompareTag("Obstacle"))
+            if (collision.gameObject.CompareTag("ObstacleDestroy"))
             {
                 Instantiate(objectDestroyFx, collision.transform.position, collision.transform.rotation);
                 Destroy(collision.gameObject);
             }
-            // if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Tail"))
-            // {
-            //     walkSpeed = 0;
-            //     _isDead = true;
-            //     StartCoroutine(DestroySnake());
-            // }
+            if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Tail"))
+            {
+                if (_isCanBreak)
+                {
+                    Instantiate(objectDestroyFx, collision.transform.position, collision.transform.rotation);
+                    Destroy(collision.gameObject);
+                }
+                else
+                {
+                    walkSpeed = 0;
+                    _isDead = true;
+                    StartCoroutine(DestroySnake());
+                }
+            }
         }
 
         private IEnumerator DestroySnake()
@@ -159,10 +173,19 @@ namespace Snake
             {
                 Instantiate(snakeDestroyFx, body.transform.position, body.transform.rotation);
                 Destroy(body);
-                yield return new WaitForSeconds(.5f);
+                yield return new WaitForSeconds(.2f);
             }
-            
-            Destroy(gameObject);
+
+            SceneManager.LoadScene(0);
+        }
+
+        private IEnumerator Shield(float time)
+        {
+            shieldFx.Play();
+            _isCanBreak = true;
+            yield return new WaitForSeconds(time);
+            _isCanBreak = false;
+            shieldFx.Stop();
         }
 
         #endregion
