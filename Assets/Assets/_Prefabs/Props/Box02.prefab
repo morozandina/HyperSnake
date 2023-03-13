@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33340589597479196}
   - component: {fileID: 23861576190659380}
   - component: {fileID: 64575811867464636}
+  - component: {fileID: -4237179336316837791}
   m_Layer: 0
   m_Name: Box02
   m_TagString: ObstacleDestroy
@@ -98,3 +99,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: ab9a3f0a8b82bb94c8beb1ae3e21c5fe, type: 3}
+--- !u!114 &-4237179336316837791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502080106171610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 852d0cb7a3909416696be775dc394e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStar: 0

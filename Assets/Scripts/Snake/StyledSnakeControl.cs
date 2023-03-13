@@ -1,9 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using Game.Spawner;
+using Main;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace Snake
 {
@@ -11,11 +15,13 @@ namespace Snake
     {
         public static Action<float> rotationValue;
         public static Action jumpSnake;
+        public static Action<int> shiedSnake;
         [Range(3, 13)] public int startLenght;
         [Header("Snake Settings: ")]
         public float walkSpeed = 5;
-        public float jumpForce = 10;
-        public float rotationSpeed = 180;
+        private float _tempSpeed;
+        public float jumpForce;
+        public float rotationSpeed;
         public Transform snakeHead;
         public LayerMask groundedMask;
         
@@ -46,19 +52,29 @@ namespace Snake
             _rigidbody = GetComponent<Rigidbody>();
             rotationValue += Rotate;
             jumpSnake += Jump;
+            shiedSnake += Shield;
 
-            StartCoroutine(Shield(3));
+            if (SceneManager.GetActiveScene().buildIndex != 0)
+                Shield(3);
         }
 
         private void OnDestroy()
         {
             rotationValue -= Rotate;
             jumpSnake -= Jump;
+            shiedSnake -= Shield;
         }
 
         private void Start()
         {
-            for (var i = 0; i < startLenght; i++)
+            var pl = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Snake);
+            rotationSpeed += pl * 5;
+            walkSpeed += pl / 4;
+            bodySpeed += pl / 4;
+            if (gap > 1)
+                gap -= pl / 4;
+            
+            for (var i = 0; i < startLenght + SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Snake); i++)
             {
                 GrowSnake();
             }
@@ -85,7 +101,13 @@ namespace Snake
             MoveSnakeBody();
         }
 
-        private void Rotate(float val) => snakeHead.Rotate(Vector3.up * val * rotationSpeed * Time.deltaTime);
+        private void Rotate(float val)
+        {
+            if (_isDead)
+                return;
+            
+            snakeHead.Rotate(Vector3.up * val * rotationSpeed * Time.deltaTime);
+        }
 
         private void Movement()
         {
@@ -139,55 +161,130 @@ namespace Snake
             if (collision.gameObject.CompareTag("Apple"))
             {
                 Instantiate(eatFx, collision.transform.position, collision.transform.rotation);
-                Destroy(collision.gameObject);
                 GrowSnake();
-                Spawner.AppleSpawn?.Invoke();
+                GetScore(100);
+                StarManager.AddApple(1);
+                Spawner.AppleSpawn?.Invoke(collision.gameObject);
                 walkSpeed += .01f;
                 bodySpeed += .01f;
-                gap += .01f;
+                if (gap > 1)
+                    gap -= .01f;
             }
             if (collision.gameObject.CompareTag("ObstacleDestroy"))
             {
                 Instantiate(objectDestroyFx, collision.transform.position, collision.transform.rotation);
-                Destroy(collision.gameObject);
+                GetScore(50);
+                GetRandomFromProps();
+                Spawner.PropsSpawn?.Invoke(collision.gameObject);
             }
-            if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Tail"))
+            if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Meteor"))
             {
                 if (_isCanBreak)
                 {
                     Instantiate(objectDestroyFx, collision.transform.position, collision.transform.rotation);
                     Destroy(collision.gameObject);
+                    GetRandomFromProps();
+                    GetScore(500);
                 }
                 else
                 {
+                    _tempSpeed = walkSpeed;
                     walkSpeed = 0;
                     _isDead = true;
-                    StartCoroutine(DestroySnake());
+                    DestroySnake();
                 }
             }
         }
 
-        private IEnumerator DestroySnake()
+        private void OnTriggerEnter(Collider other)
         {
+            if (SceneManager.GetActiveScene().buildIndex == 0)
+                return;
+            
+            if (other.CompareTag("Tail"))
+            {
+                if (_isCanBreak)
+                    return;
+
+                _tempSpeed = walkSpeed;
+                walkSpeed = 0;
+                _isDead = true;
+                DestroySnake();
+            }
+                
+        }
+
+        private void DestroySnake()
+        {
+            SettingsPrefs.SavePrefs(SettingsPrefs.Death, SettingsPrefs.GetPrefs(SettingsPrefs.Death) + 1);
+            GameUIManager.Instance?.Lose(callback =>
+            {
+                StartCoroutine(DestroySnakeCoroutine(callback));
+            }, () =>
+            {
+                walkSpeed = _tempSpeed;
+                _isDead = false;
+                Shield(3);
+            });
+        }
+
+        private IEnumerator DestroySnakeCoroutine(Action callback)
+        {
+            float waitBetween = 2 / _bodyParts.Count;
             foreach (var body in _bodyParts)
             {
                 Instantiate(snakeDestroyFx, body.transform.position, body.transform.rotation);
                 Destroy(body);
-                yield return new WaitForSeconds(.2f);
+                yield return new WaitForSeconds(waitBetween);
             }
 
-            SceneManager.LoadScene(0);
-        }
-
-        private IEnumerator Shield(float time)
-        {
-            shieldFx.Play();
-            _isCanBreak = true;
-            yield return new WaitForSeconds(time);
-            _isCanBreak = false;
-            shieldFx.Stop();
+            yield return new WaitForSeconds(1);
+            
+            callback.Invoke();
         }
 
         #endregion
+
+        #region Status
+
+        private void GetScore(int value)
+        {
+            GameUIManager.Instance.UpdateScore(value);
+        }
+
+        #endregion
+
+        #region Super
+
+        private Coroutine _shieldCoroutine;
+        private void Shield(int time) => _shieldCoroutine ??= StartCoroutine(StartShield(time));
+
+        private IEnumerator StartShield(int time)
+        {
+            var plus = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Powers);
+            GameUIManager.Instance.ShieldTimer(time + plus);
+            shieldFx.Play();
+            _isCanBreak = true;
+            yield return new WaitForSeconds(time + plus);
+            _isCanBreak = false;
+            shieldFx.Stop();
+            _shieldCoroutine = null;
+        }
+
+        #endregion
+
+        private void GetRandomFromProps()
+        {
+            var x = Random.Range(0, 100);
+            if (x > 80)
+            {
+                Debug.Log("Add power");
+                Shield(5);
+            }
+            else
+            {
+                GameUIManager.Instance.UpdateStars(SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Seeker));
+            }
+        }
     }
 }

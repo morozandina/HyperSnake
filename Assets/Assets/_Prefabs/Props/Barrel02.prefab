@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33870030727441478}
   - component: {fileID: 23558906102498806}
   - component: {fileID: 64773073453476968}
+  - component: {fileID: 4481914909720742393}
   m_Layer: 0
   m_Name: Barrel02
   m_TagString: ObstacleDestroy
@@ -98,3 +99,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 6fcf435d5a7966e4697a0ccf271dd5b9, type: 3}
+--- !u!114 &4481914909720742393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865146958215006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 852d0cb7a3909416696be775dc394e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStar: 0

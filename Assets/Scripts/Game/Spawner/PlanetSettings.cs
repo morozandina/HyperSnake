@@ -18,6 +18,9 @@ namespace Game.Spawner
     public class PlanetSettings : ScriptableObject
     {
         public string planetName;
+        public int size;
+        public int totalStarCount;
+        public float meteorStartDelay, meteorBetweenDelay, meteorCount;
         public List<Color> planetColors = new List<Color>(new Color[2]);
         public List<SpawnerObject> spawnerObjects;
     }

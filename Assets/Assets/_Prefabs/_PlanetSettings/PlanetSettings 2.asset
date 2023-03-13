@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 617931169a43e410c9bf5705b0c5ce62, type: 3}
+  m_Name: PlanetSettings 2
+  m_EditorClassIdentifier: 
+  planetName: Medium
+  size: 50
+  totalStarCount: 4
+  meteorStartDelay: 3
+  meteorBetweenDelay: 30
+  meteorCount: 6
+  planetColors:
+  - {r: 0.3882353, g: 0.34901962, b: 0.52156866, a: 1}
+  - {r: 0.22352941, g: 0.1882353, b: 0.3254902, a: 1}
+  spawnerObjects:
+  - name: Grass
+    spawnPrefabs:
+    - {fileID: 1352152825796216, guid: 60fd93cfbe5244942957332e3c60cf47, type: 3}
+    - {fileID: 1831996929198294, guid: 756fcf8fd31fb534ba309f68fb4ddaa8, type: 3}
+    - {fileID: 1120071338443100, guid: 27fe71cc9587a8442b23816392c45e05, type: 3}
+    spawnCountMix: 100
+    spawnCountMax: 250
+  - name: Rock
+    spawnPrefabs:
+    - {fileID: 1481664815661224, guid: 31d1f7e1cbdbffa489500315226de50c, type: 3}
+    - {fileID: 1128032676848168, guid: 4a2dc671c0cdbe14c981a10feaa58cb9, type: 3}
+    - {fileID: 1001414074500698, guid: 2a87cafd13afe594daeec7d07201997b, type: 3}
+    - {fileID: 1567670031196020, guid: 2eeeb12373b786d47b30291a50815167, type: 3}
+    - {fileID: 1923504823314646, guid: d497f9628be427b45b97c45753aea8fb, type: 3}
+    - {fileID: 1929837870007236, guid: 1faaab9c4a22e714985e25d453a5dd66, type: 3}
+    - {fileID: 1275126349886688, guid: 49f7668e38e658d419250c3e9da25e02, type: 3}
+    - {fileID: 1762859735843074, guid: 66ac5222446f95541a6cdc387731f585, type: 3}
+    spawnCountMix: 50
+    spawnCountMax: 150
+  - name: Step
+    spawnPrefabs:
+    - {fileID: 1324212743315054, guid: d39de6453bcb4aa4c9810147ce0a5518, type: 3}
+    - {fileID: 1271236773216930, guid: 643e540866456a447930c4da7e86f178, type: 3}
+    - {fileID: 1482943496880446, guid: c8891830cf9bef547a297752e6407698, type: 3}
+    - {fileID: 1151970946568990, guid: e2d44cb57a9ce6347be9cbd6a799197d, type: 3}
+    - {fileID: 1150359970671672, guid: 83cd3edf36f99954dbc05b6b7bcc5d37, type: 3}
+    - {fileID: 1895316071115380, guid: da519e7cd62875b4bb874c413bda65ff, type: 3}
+    - {fileID: 1584256351326938, guid: 957c9e5663f5835488112efed954df14, type: 3}
+    - {fileID: 1051250541041220, guid: 2177933c5e71eb447a8d7c690a512d2d, type: 3}
+    - {fileID: 1415873502361976, guid: 9049aadaf8ae52645b041e85d289ba6a, type: 3}
+    - {fileID: 1919177478679594, guid: 16cae3e43b65d0f44be484996ef126ce, type: 3}
+    - {fileID: 1360669187933104, guid: d1d258803ec1748439248aea85fad1bf, type: 3}
+    - {fileID: 1254934104552316, guid: cbc94d63262c369448cf78bc774c5ebf, type: 3}
+    - {fileID: 1305299894775858, guid: 1f5165baaaefd6946808493ce9cd91a7, type: 3}
+    - {fileID: 1423910522137968, guid: f619d3315a12f9f4a8a1441b11d628a4, type: 3}
+    - {fileID: 1275466430859362, guid: 7d75a211d480c9a4da734bedad366926, type: 3}
+    - {fileID: 1427391491643382, guid: c1ef76c4b5a58504783f4bfdeeb3c464, type: 3}
+    spawnCountMix: 40
+    spawnCountMax: 85
+  - name: Props
+    spawnPrefabs:
+    - {fileID: 1571235623563798, guid: f52894ea6e88566439dc170f021c5f05, type: 3}
+    - {fileID: 1865146958215006, guid: b7b7ef1c1ba66fd4fbf0e9945939f2e0, type: 3}
+    - {fileID: 1948821674277208, guid: 673b0d62429ca5b4a8bda250dafadbac, type: 3}
+    - {fileID: 1502080106171610, guid: b1d962c63e1a93c4e97fbd74f1d468b7, type: 3}
+    spawnCountMix: 5
+    spawnCountMax: 10
+  - name: Clifs
+    spawnPrefabs:
+    - {fileID: 1940014154682574, guid: 928204c48bfe18a4d998f2a912b423f9, type: 3}
+    - {fileID: 1866412459105464, guid: 4443a83b46730cf4aab1c505db4ec1ce, type: 3}
+    - {fileID: 1711519173362764, guid: a3f0557d3be7185458e0bc49bb842cb6, type: 3}
+    - {fileID: 1612787323966296, guid: c731e93a029e0f741b2e7e2f37b67791, type: 3}
+    - {fileID: 1262802658497826, guid: 3708e3d3548d5ff448764cabd0756891, type: 3}
+    - {fileID: 1764724748844974, guid: 7caae63d30e0fc34698fdbba19493cc2, type: 3}
+    - {fileID: 1881772571300220, guid: 6fe81aa4045fa4c47ac0bd684a31f98a, type: 3}
+    - {fileID: 1483614009049936, guid: 9764dd9c443a6c844a61c529d30772c9, type: 3}
+    - {fileID: 1987416834073456, guid: 89635ce85c600e64daebbb13cc381b83, type: 3}
+    - {fileID: 1221608565263620, guid: 900776f6bd99bde42b59b8e0b926771c, type: 3}
+    - {fileID: 1464195318581766, guid: a64d2773954bab14f93e040a31f189b7, type: 3}
+    - {fileID: 1557235522115620, guid: 1ce7658e94ca3a4439c0f8ce5bef07cf, type: 3}
+    - {fileID: 1319399268598280, guid: b2e485fb598c804429066be840ac5f28, type: 3}
+    spawnCountMix: 15
+    spawnCountMax: 35

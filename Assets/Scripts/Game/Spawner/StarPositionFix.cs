@@ -5,12 +5,17 @@ namespace Game.Spawner
 {
     public class StarPositionFix : MonoBehaviour
     {
+        public bool isStar;
+        
         private void OnCollisionEnter(Collision collision)
         {
             if (!collision.gameObject.CompareTag("Obstacle")) return;
             
-            Spawner.AppleSpawn?.Invoke();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            if (isStar)
+                Spawner.AppleSpawn?.Invoke(gameObject);
+            else
+                Spawner.PropsSpawn?.Invoke(gameObject);
         }
     }
 }
