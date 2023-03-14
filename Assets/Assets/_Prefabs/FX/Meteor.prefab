@@ -9692,6 +9692,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boom: {fileID: 3300175807242694973, guid: 4acd1a45324464ea1bcfe8d978d59a8a, type: 3}
   decalProjector: {fileID: 3942583419987096695}
+  collisionSound: {fileID: 8300000, guid: 7cf46186f8e664b3fb3413fba411a99d, type: 3}
 --- !u!65 &1664648892029395344
 BoxCollider:
   m_ObjectHideFlags: 0

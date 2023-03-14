@@ -39,7 +39,10 @@ namespace Game.Meteor
                 if (_meteors.Count == 0)
                 {
                     for (var i = 0; i < count; i++)
+                    {
                         SpawnMeteor();
+                        yield return new WaitForSeconds(.2f);
+                    }
 
                     GameUIManager.Instance.MeteorTimer((int)betweenDelay);
                     yield return new WaitForSeconds(betweenDelay);

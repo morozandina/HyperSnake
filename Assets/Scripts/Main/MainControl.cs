@@ -12,9 +12,11 @@ namespace Main
 {
     public class MainControl : MonoBehaviour
     {
+        public AudioClip buttonSound;
         [SerializeField] private GameObject globalVolume;
         public List<PlanetSettings> planets = new List<PlanetSettings>();
         private bool _volumeState;
+        private int _soundState;
         public Animator transition;
 
         [Header("Settings: ")]
@@ -26,8 +28,9 @@ namespace Main
         [SerializeField] private Toggle sound;
 
         [Header("Choose: ")]
-        [SerializeField] private TextMeshProUGUI mapName;
-        [SerializeField] private Button easy, medium, hard;
+        [SerializeField] private Button easy;
+        [SerializeField] private Button medium;
+        [SerializeField] private Button hard;
 
         [Header("Upgrade: ")]
         [SerializeField] private Color maxColor;
@@ -40,7 +43,9 @@ namespace Main
         {
             Spawner.planetSettings = planets[0];
             _volumeState = SettingsPrefs.GetPrefs(SettingsPrefs.Volume) == 0;
+            _soundState = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Sound);
             globalVolume.SetActive(_volumeState);
+            Sound.Instance.VolumeControl(_soundState);
             ConfigureMap();
             ConfigureUpdate();
             RefreshCoins();
@@ -53,15 +58,31 @@ namespace Main
 
         public void ChangeVolume()
         {
+            Sound.Instance.PlaySound(buttonSound);
             _volumeState = volume.isOn;
             SettingsPrefs.SavePrefs(SettingsPrefs.Volume, _volumeState ? 0 : 1);
             globalVolume.SetActive(_volumeState);
+        }
+
+        public void ChangeMusicVolume()
+        {
+            Sound.Instance.PlaySound(buttonSound);
+            var curr = _soundState == 0 ? 1 : 0;
+            SettingsPrefs.SavePrefs(SettingsPrefs.Sound, curr);
+            Sound.Instance.VolumeControl(curr);
+            _soundState = curr;
         }
         
         // Settings
         public void EnterToSettings()
         {
+            Sound.Instance.PlaySound(buttonSound);
             volume.isOn = _volumeState;
+            sound.isOn = _soundState == 1;
+
+            volume.onValueChanged.AddListener(x => ChangeVolume());
+            sound.onValueChanged.AddListener(x => ChangeMusicVolume());
+            
             
             bestScore.text = SettingsPrefs.GetPrefs(SettingsPrefs.Best).ToString();
             totalDeath.text = SettingsPrefs.GetPrefs(SettingsPrefs.Death).ToString();
@@ -72,14 +93,15 @@ namespace Main
 
         public void ExitFromSettings()
         {
+            Sound.Instance.PlaySound(buttonSound);
+            volume.onValueChanged.RemoveAllListeners();
+            sound.onValueChanged.RemoveAllListeners();
             settings.SetActive(false);
         }
         
         // Map
         private void ConfigureMap()
         {
-            mapName.text = Spawner.planetSettings.planetName;
-
             if (SettingsPrefs.GetPrefs(SettingsPrefs.Level1) == 0)
             {
                 medium.transform.GetChild(2).gameObject.SetActive(false);
@@ -99,15 +121,17 @@ namespace Main
         private void ChangeMap(PlanetSettings planet)
         {
             Spawner.planetSettings = planet;
-            mapName.text = planet.planetName;
+            Sound.Instance.PlaySound(buttonSound);
+            ChangeScene(1);
         }
 
         private void ChangeMap(PlanetSettings planet, string prefs, int price, GameObject obj)
         {
+            Sound.Instance.PlaySound(buttonSound);
             if (SettingsPrefs.GetPrefs(prefs) > 0)
             {
                 Spawner.planetSettings = planet;
-                mapName.text = planet.planetName;
+                ChangeScene(1);
                 return;
             }
             obj.transform.GetChild(2).gameObject.SetActive(false);
@@ -153,6 +177,7 @@ namespace Main
                 txt.transform.GetChild(0).GetComponent<Image>().color = Color.white;
                 btn.onClick.AddListener(() =>
                 {
+                    Sound.Instance.PlaySound(buttonSound);
                     SettingsPrefs.SavePrefs(prefs, SettingsPrefs.GetUpdatePrefs(prefs) + 1);
                     StarManager.AddStars(-price);
                     RefreshCoins();
@@ -178,6 +203,11 @@ namespace Main
             transition.SetTrigger("Start");
             yield return new WaitForSeconds(1.2f);
             SceneManager.LoadScene(levelIndex);
+        }
+
+        public void PlaySoundButton()
+        {
+            Sound.Instance.PlaySound(buttonSound);
         }
     }
 }

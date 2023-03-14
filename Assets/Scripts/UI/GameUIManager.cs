@@ -16,7 +16,8 @@ namespace UI
     {
         public static GameUIManager Instance;
         public Animator transition;
-
+        public AudioClip buttonSound;
+        
         private int _currentScore = 0;
         private int _currentStar = 0;
         [Header("For Settings :")]
@@ -59,11 +60,13 @@ namespace UI
             switch (status)
             {
                 case true:
+                    Sound.Instance.PlaySound(buttonSound);
                     pause.SetActive(true);
 
                     Time.timeScale = 0;
                     break;
                 case false:
+                    Sound.Instance.PlaySound(buttonSound);
                     pause.SetActive(false);
                     StyledSnakeControl.shiedSnake?.Invoke(3);
                     
@@ -111,6 +114,8 @@ namespace UI
         // Restart
         public void Restart()
         {
+            Sound.Instance.PlaySound(buttonSound);
+            Sound.Instance.StopMusic();
             Time.timeScale = 1;
             SaveStars();
             StartCoroutine(LoadLevel(SceneManager.GetActiveScene().buildIndex));
@@ -119,6 +124,8 @@ namespace UI
         // Exit
         public void Exit()
         {
+            Sound.Instance.PlaySound(buttonSound);
+            Sound.Instance.StopMusic();
             Time.timeScale = 1;
             SaveStars();
             StartCoroutine(LoadLevel(0));
@@ -151,6 +158,11 @@ namespace UI
         public void ShieldTimer(int time)
         {
             StartCoroutine(Timer(shield, time, shieldTimer));
+        }
+
+        public void SuperTimer(int time)
+        {
+            StartCoroutine(Timer(super, time, superTimer));
         }
 
         private static IEnumerator Timer(int time, TMP_Text txt)

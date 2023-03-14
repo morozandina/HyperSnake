@@ -16,6 +16,14 @@ namespace Snake
         public static Action<float> rotationValue;
         public static Action jumpSnake;
         public static Action<int> shiedSnake;
+        
+        public AudioClip[] appleEat;
+        public AudioClip starCollect;
+        public AudioClip abilityCollect;
+        public AudioClip hit;
+        public AudioClip explosion;
+        public AudioClip jump;
+        
         [Range(3, 13)] public int startLenght;
         [Header("Snake Settings: ")]
         public float walkSpeed = 5;
@@ -123,7 +131,10 @@ namespace Snake
                 return;
             // Jump
             if (_grounded)
+            {
+                Sound.Instance.PlaySound(jump);
                 _rigidbody.AddForce(transform.up * jumpForce);
+            }
         }
 
         #endregion
@@ -165,6 +176,7 @@ namespace Snake
                 GetScore(100);
                 StarManager.AddApple(1);
                 Spawner.AppleSpawn?.Invoke(collision.gameObject);
+                Sound.Instance.PlaySound(appleEat[Random.Range(0, appleEat.Length)]);
                 walkSpeed += .01f;
                 bodySpeed += .01f;
                 if (gap > 1)
@@ -173,6 +185,7 @@ namespace Snake
             if (collision.gameObject.CompareTag("ObstacleDestroy"))
             {
                 Instantiate(objectDestroyFx, collision.transform.position, collision.transform.rotation);
+                Sound.Instance.PlaySound(hit);
                 GetScore(50);
                 GetRandomFromProps();
                 Spawner.PropsSpawn?.Invoke(collision.gameObject);
@@ -183,11 +196,12 @@ namespace Snake
                 {
                     Instantiate(objectDestroyFx, collision.transform.position, collision.transform.rotation);
                     Destroy(collision.gameObject);
-                    GetRandomFromProps();
+                    Sound.Instance.PlaySound(hit);
                     GetScore(500);
                 }
                 else
                 {
+                    Sound.Instance.PlaySound(explosion);
                     _tempSpeed = walkSpeed;
                     walkSpeed = 0;
                     _isDead = true;
@@ -205,6 +219,8 @@ namespace Snake
             {
                 if (_isCanBreak)
                     return;
+                
+                Sound.Instance.PlaySound(hit);
 
                 _tempSpeed = walkSpeed;
                 walkSpeed = 0;
@@ -234,6 +250,7 @@ namespace Snake
             foreach (var body in _bodyParts)
             {
                 Instantiate(snakeDestroyFx, body.transform.position, body.transform.rotation);
+                Sound.Instance.PlaySound(explosion);
                 Destroy(body);
                 yield return new WaitForSeconds(waitBetween);
             }
@@ -256,8 +273,9 @@ namespace Snake
 
         #region Super
 
-        private Coroutine _shieldCoroutine;
+        private Coroutine _shieldCoroutine, _speedCoroutine;
         private void Shield(int time) => _shieldCoroutine ??= StartCoroutine(StartShield(time));
+        private void Speed(int time) => _speedCoroutine ??= StartCoroutine(StartSpeed(time));
 
         private IEnumerator StartShield(int time)
         {
@@ -270,6 +288,24 @@ namespace Snake
             shieldFx.Stop();
             _shieldCoroutine = null;
         }
+        
+        private IEnumerator StartSpeed(int time)
+        {
+            var plus = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Powers);
+            GameUIManager.Instance.SuperTimer(time + plus);
+            rotationSpeed += plus * 2;
+            walkSpeed += plus;
+            bodySpeed += plus;
+            if (gap - plus > 1)
+                gap -= plus;
+            yield return new WaitForSeconds(time + plus);
+            rotationSpeed -= plus * 2;
+            walkSpeed -= plus;
+            bodySpeed -= plus;
+            if (gap - plus > 1)
+                gap += plus;
+            _speedCoroutine = null;
+        }
 
         #endregion
 
@@ -278,11 +314,28 @@ namespace Snake
             var x = Random.Range(0, 100);
             if (x > 80)
             {
-                Debug.Log("Add power");
-                Shield(5);
+                Sound.Instance.PlaySound(abilityCollect);
+                switch (x)
+                {
+                    case < 90:
+                        Shield(5);
+                        break;
+                    case >= 90 and < 97:
+                        Speed(5);
+                        break;
+                    case > 97:
+                        GetScore(5000);
+                        GrowSnake();
+                        GrowSnake();
+                        GrowSnake();
+                        GrowSnake();
+                        GrowSnake();
+                        break;
+                }
             }
             else
             {
+                Sound.Instance.PlaySound(starCollect);
                 GameUIManager.Instance.UpdateStars(SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Seeker));
             }
         }

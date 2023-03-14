@@ -10,6 +10,7 @@ namespace Game.Meteor
     {
         public ParticleSystem boom;
         public DecalProjector decalProjector;
+        public AudioClip collisionSound;
 
         private void Start()
         {
@@ -31,6 +32,7 @@ namespace Game.Meteor
 
         private void OnCollisionEnter(Collision collision)
         {
+            Sound.Instance.PlaySound(collisionSound);
             Instantiate(boom, transform.position, transform.rotation);
             gameObject.SetActive(false);
         }

@@ -10,6 +10,7 @@ namespace Game.Spawner
 {
     public class Spawner : MonoBehaviour
     {
+        public AudioClip[] backgroundMusic;
         public static PlanetSettings planetSettings;
         public static Action<GameObject> AppleSpawn;
         public static Action<GameObject> PropsSpawn;
@@ -23,6 +24,7 @@ namespace Game.Spawner
         {
             _planet = transform.GetChild(0);
             _decals = transform.GetChild(1);
+            Sound.Instance.PlayMusic(backgroundMusic[Random.Range(0, backgroundMusic.Length)]);
             
             _planet.localScale = Vector3.one * planetSettings.size;
             _decals.localScale = Vector3.one * planetSettings.size;
