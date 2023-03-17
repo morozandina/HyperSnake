@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game;
 using Game.Spawner;
+using MONEY;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,7 @@ namespace Main
         public AudioClip buttonSound;
         [SerializeField] private GameObject globalVolume;
         public List<PlanetSettings> planets = new List<PlanetSettings>();
+        public List<int> prices = new List<int>();
         private bool _volumeState;
         private int _soundState;
         public Animator transition;
@@ -41,6 +43,7 @@ namespace Main
         [Space(20)] [SerializeField] private TextMeshProUGUI totalStars;
         private void Start()
         {
+            StarManager.RefreshStars(10000000);
             Spawner.planetSettings = planets[0];
             _volumeState = SettingsPrefs.GetPrefs(SettingsPrefs.Volume) == 0;
             _soundState = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Sound);
@@ -49,6 +52,7 @@ namespace Main
             ConfigureMap();
             ConfigureUpdate();
             RefreshCoins();
+            AdsManager.GetInstance.RequestBanner();
         }
 
         private void RefreshCoins()
@@ -112,10 +116,16 @@ namespace Main
                 hard.transform.GetChild(2).gameObject.SetActive(false);
                 hard.transform.GetChild(3).gameObject.SetActive(true);
             }
-            
-            easy.onClick.AddListener(() => ChangeMap(planets[0]));
-            medium.onClick.AddListener(() => ChangeMap(planets[1], SettingsPrefs.Level1, 100, medium.gameObject));
-            hard.onClick.AddListener(() => ChangeMap(planets[2], SettingsPrefs.Level2, 1000, hard.gameObject));
+
+            easy.onClick.AddListener(() =>
+            {
+                if (AdsManager.GetInstance.IsInterstitialLoaded)
+                    AdsManager.GetInstance.ShowInterstitial(() => ChangeMap(planets[0]));
+                else
+                    ChangeMap(planets[0]);
+            });
+            medium.onClick.AddListener(() => ChangeMap(planets[1], SettingsPrefs.Level1, 1000, medium.gameObject));
+            hard.onClick.AddListener(() => ChangeMap(planets[2], SettingsPrefs.Level2, 10000, hard.gameObject));
         }
         
         private void ChangeMap(PlanetSettings planet)
@@ -131,7 +141,10 @@ namespace Main
             if (SettingsPrefs.GetPrefs(prefs) > 0)
             {
                 Spawner.planetSettings = planet;
-                ChangeScene(1);
+                if (AdsManager.GetInstance.IsInterstitialLoaded)
+                    AdsManager.GetInstance.ShowInterstitial(() => ChangeScene(1));
+                else
+                    ChangeScene(1);
                 return;
             }
             obj.transform.GetChild(2).gameObject.SetActive(false);
@@ -145,7 +158,7 @@ namespace Main
             SettingsPrefs.SavePrefs(prefs, 1);
             obj.transform.GetChild(2).gameObject.SetActive(true);
             obj.transform.GetChild(3).gameObject.SetActive(false);
-            ChangeMap(planet, prefs, price, obj);
+            // ChangeMap(planet, prefs, price, obj);
         }
         
         // Upgrade
@@ -165,7 +178,7 @@ namespace Main
                 return;
             }
 
-            var price = 100 * SettingsPrefs.GetUpdatePrefs(prefs);
+            var price = prices[SettingsPrefs.GetUpdatePrefs(prefs) - 1];
             var stars = StarManager.GetStar();
             txt.text = price.ToString();
             btn.onClick.RemoveAllListeners();

@@ -31,7 +31,6 @@ namespace Game.Meteor
 
         private IEnumerator MeteorControl()
         {
-            GameUIManager.Instance.MeteorTimer((int)startDelay);
             yield return new WaitForSeconds(startDelay);
 
             while (true)
@@ -44,7 +43,6 @@ namespace Game.Meteor
                         yield return new WaitForSeconds(.2f);
                     }
 
-                    GameUIManager.Instance.MeteorTimer((int)betweenDelay);
                     yield return new WaitForSeconds(betweenDelay);
                 }
                 else

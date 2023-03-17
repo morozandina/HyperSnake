@@ -28,6 +28,8 @@ namespace Game.Spawner
             
             _planet.localScale = Vector3.one * planetSettings.size;
             _decals.localScale = Vector3.one * planetSettings.size;
+            _planet.gameObject.isStatic = true;
+            _decals.gameObject.isStatic = true;
             snake.position = new Vector3(0, 0, (planetSettings.size / 2) + 5);
             
             StartSpawn();
@@ -54,14 +56,14 @@ namespace Game.Spawner
             foreach (var spawner in planetSettings.spawnerObjects)
             {
                 for (var i = 0; i <= spawner.GetSpawnCount; i++)
-                    SpawnPrefab(spawner.spawnPrefabs, spawner.name != "Props");
+                    SpawnPrefab(spawner.spawnPrefabs);
             }
 
             for (var i = 0; i <= planetSettings.totalStarCount; i++)
                 SpawnApple();
         }
 
-        private void SpawnPrefab(IReadOnlyList<GameObject> toSpawn, bool isStatic)
+        private void SpawnPrefab(IReadOnlyList<GameObject> toSpawn)
         {
             // Pick Random Object
             var prefabInd = Random.Range(0, toSpawn.Count);
@@ -84,7 +86,6 @@ namespace Game.Spawner
             
             // Parent to Globe
             addSpawn.transform.parent = _planet;
-            addSpawn.isStatic = isStatic;
         }
         
         private void SpawnApple()

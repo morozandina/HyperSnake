@@ -14,7 +14,6 @@ namespace Snake
     public class StyledSnakeControl : MonoBehaviour
     {
         public static Action<float> rotationValue;
-        public static Action jumpSnake;
         public static Action<int> shiedSnake;
         
         public AudioClip[] appleEat;
@@ -59,7 +58,6 @@ namespace Snake
         private void Awake() {
             _rigidbody = GetComponent<Rigidbody>();
             rotationValue += Rotate;
-            jumpSnake += Jump;
             shiedSnake += Shield;
 
             if (SceneManager.GetActiveScene().buildIndex != 0)
@@ -69,7 +67,6 @@ namespace Snake
         private void OnDestroy()
         {
             rotationValue -= Rotate;
-            jumpSnake -= Jump;
             shiedSnake -= Shield;
         }
 
@@ -123,18 +120,6 @@ namespace Snake
             var moveDir = new Vector3(0,0, 1).normalized;
             var targetMoveAmount = moveDir * walkSpeed;
             _moveAmount = Vector3.SmoothDamp(_moveAmount,targetMoveAmount,ref _smoothMoveVelocity,.15f);
-        }
-
-        private void Jump()
-        {
-            if (_isDead)
-                return;
-            // Jump
-            if (_grounded)
-            {
-                Sound.Instance.PlaySound(jump);
-                _rigidbody.AddForce(transform.up * jumpForce);
-            }
         }
 
         #endregion
@@ -195,8 +180,8 @@ namespace Snake
                 if (_isCanBreak)
                 {
                     Instantiate(objectDestroyFx, collision.transform.position, collision.transform.rotation);
-                    Destroy(collision.gameObject);
                     Sound.Instance.PlaySound(hit);
+                    Spawner.PropsSpawn?.Invoke(collision.gameObject);
                     GetScore(500);
                 }
                 else

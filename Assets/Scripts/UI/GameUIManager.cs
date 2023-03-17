@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Game;
 using Main;
+using MONEY;
 using Newtonsoft.Json.Linq;
 using Snake;
 using TMPro;
@@ -32,7 +33,6 @@ namespace UI
         [Header("Text: ")]
         [SerializeField] private TextMeshProUGUI score;
         [SerializeField] private TextMeshProUGUI bestScore;
-        [SerializeField] private TextMeshProUGUI meteorTimer;
         [SerializeField] private TextMeshProUGUI shieldTimer;
         [SerializeField] private TextMeshProUGUI superTimer;
         [SerializeField] private TextMeshProUGUI stars;
@@ -42,6 +42,9 @@ namespace UI
         [SerializeField] private Button revive;
         [SerializeField] private Button exit;
 
+        [Header("Settings: ")]
+        [SerializeField] private Toggle volume;
+        [SerializeField] private Toggle sound;
         private void Awake()
         {
             Instance = this;
@@ -52,7 +55,28 @@ namespace UI
 
         private void Start()
         {
+            volume.isOn = SettingsPrefs.GetPrefs(SettingsPrefs.Volume) == 0;
+            sound.isOn = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Sound) == 1;
             globalVolume.SetActive(SettingsPrefs.GetPrefs(SettingsPrefs.Volume) == 0);
+            
+            volume.onValueChanged.AddListener(x => ChangeVolume());
+            sound.onValueChanged.AddListener(x => ChangeMusicVolume());
+        }
+        
+        public void ChangeMusicVolume()
+        {
+            var soundState = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Sound);
+            Sound.Instance.PlaySound(buttonSound);
+            var curr = soundState == 0 ? 1 : 0;
+            SettingsPrefs.SavePrefs(SettingsPrefs.Sound, curr);
+            Sound.Instance.VolumeControl(curr);
+        }
+        
+        public void ChangeVolume()
+        {
+            Sound.Instance.PlaySound(buttonSound);
+            SettingsPrefs.SavePrefs(SettingsPrefs.Volume, volume.isOn ? 0 : 1);
+            globalVolume.SetActive(volume.isOn);
         }
 
         public void Pause(bool status)
@@ -92,12 +116,28 @@ namespace UI
             revive.onClick.RemoveAllListeners();
             revive.onClick.AddListener(() =>
             {
-                lose.SetActive(false);
-                onRevive.Invoke();
+                if (AdsManager.GetInstance.IsRewardLoaded)
+                {
+                    AdsManager.GetInstance.ShowReward(() =>
+                    {
+                        revive.gameObject.SetActive(false);
+                        lose.SetActive(false);
+                        onRevive.Invoke();
+                    });
+                }
             });
             exit.onClick.RemoveAllListeners();
             exit.onClick.AddListener(() =>
             {
+                if (AdsManager.GetInstance.IsInterstitialLoaded)
+                {
+                    AdsManager.GetInstance.ShowInterstitial(() =>
+                    {
+                        lose.SetActive(false);
+                        onLose.Invoke(Exit);
+                    }); 
+                    return;
+                }
                 lose.SetActive(false);
                 onLose.Invoke(Exit);
             });
@@ -147,12 +187,6 @@ namespace UI
         public void SaveStars()
         {
             StarManager.RefreshStars(_currentStar);
-        }
-        
-        // Timer and powers
-        public void MeteorTimer(int time)
-        {
-            StartCoroutine(Timer(time, meteorTimer));
         }
 
         public void ShieldTimer(int time)

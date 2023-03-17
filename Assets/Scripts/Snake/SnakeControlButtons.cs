@@ -8,7 +8,6 @@ namespace Snake
     public enum MoveType
     {
         Left,
-        Jump,
         Right
     }
     public class SnakeControlButtons : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
@@ -25,10 +24,6 @@ namespace Snake
             {
                 case MoveType.Left:
                     StyledSnakeControl.rotationValue?.Invoke(-1);
-                    break;
-                case MoveType.Jump:
-                    StyledSnakeControl.jumpSnake?.Invoke();
-                    _isHandle = false;
                     break;
                 case MoveType.Right:
                     StyledSnakeControl.rotationValue?.Invoke(1);
