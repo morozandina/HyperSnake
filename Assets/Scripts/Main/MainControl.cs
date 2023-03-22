@@ -43,8 +43,8 @@ namespace Main
         [Space(20)] [SerializeField] private TextMeshProUGUI totalStars;
         private void Start()
         {
-            StarManager.AddStars(100);
-            PlayerPrefs.SetInt(AdsManager.RemoveAds, 1);
+            // StarManager.AddStars(100);
+            // PlayerPrefs.SetInt(AdsManager.RemoveAds, 1);
             Spawner.planetSettings = planets[0];
             _volumeState = SettingsPrefs.GetPrefs(SettingsPrefs.Volume) == 0;
             _soundState = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Sound);

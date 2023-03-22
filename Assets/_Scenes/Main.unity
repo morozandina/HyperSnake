@@ -7068,10 +7068,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 280e4421d793a4978a7f7ff8424caf1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  androidBannerID: 'ca-app-pub-4716797379987656/5586725753 '
-  androidInterstitialID: 'ca-app-pub-4716797379987656/2657310088 '
-  androidRewardedVideoID: 'ca-app-pub-4716797379987656/6213411714 '
-  androidAppOpenID: 'ca-app-pub-4716797379987656/1519488237 '
+  androidBannerID: ca-app-pub-4716797379987656/5586725753
+  androidInterstitialID: ca-app-pub-4716797379987656/2657310088
+  androidRewardedVideoID: ca-app-pub-4716797379987656/6213411714
+  androidAppOpenID: ca-app-pub-4716797379987656/1519488237
 --- !u!4 &1296389233
 Transform:
   m_ObjectHideFlags: 0
