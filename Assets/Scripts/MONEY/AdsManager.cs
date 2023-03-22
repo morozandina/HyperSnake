@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using GoogleMobileAds.Api;
-using GoogleMobileAds.Api.Mediation.AppLovin;
 using GoogleMobileAds.Common;
 using UnityEngine;
 
@@ -60,9 +59,6 @@ namespace MONEY
                 if (!_isInitialized)
                 {
                     _isInitialized = true;
-                    // AppLovin
-                    AppLovin.SetHasUserConsent(true);
-                    AppLovin.Initialize();
                 
                     RequestConfiguration requestConfiguration = new RequestConfiguration.Builder().SetSameAppKeyEnabled(true).build();
                     MobileAds.SetRequestConfiguration(requestConfiguration);
@@ -102,7 +98,7 @@ namespace MONEY
         }
 
         private void HandleOnBannerAdLoaded(object sender, EventArgs args) => _banner.Show();
-        private void DestroyBanner() => _banner?.Destroy();
+        public void DestroyBanner() => _banner?.Destroy();
         private void HideBanner() => _banner?.Hide();
         
         // Interstitial

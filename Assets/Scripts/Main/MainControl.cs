@@ -43,7 +43,8 @@ namespace Main
         [Space(20)] [SerializeField] private TextMeshProUGUI totalStars;
         private void Start()
         {
-            StarManager.RefreshStars(10000000);
+            StarManager.AddStars(100);
+            PlayerPrefs.SetInt(AdsManager.RemoveAds, 1);
             Spawner.planetSettings = planets[0];
             _volumeState = SettingsPrefs.GetPrefs(SettingsPrefs.Volume) == 0;
             _soundState = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Sound);
@@ -120,12 +121,17 @@ namespace Main
             easy.onClick.AddListener(() =>
             {
                 if (AdsManager.GetInstance.IsInterstitialLoaded)
-                    AdsManager.GetInstance.ShowInterstitial(() => ChangeMap(planets[0]));
+                    AdsManager.GetInstance.ShowInterstitial(() => { ChangeMap(planets[0]);
+                        AdsManager.GetInstance.DestroyBanner();
+                    });
                 else
+                {
+                    AdsManager.GetInstance.DestroyBanner();
                     ChangeMap(planets[0]);
+                }
             });
-            medium.onClick.AddListener(() => ChangeMap(planets[1], SettingsPrefs.Level1, 1000, medium.gameObject));
-            hard.onClick.AddListener(() => ChangeMap(planets[2], SettingsPrefs.Level2, 10000, hard.gameObject));
+            medium.onClick.AddListener(() => ChangeMap(planets[1], SettingsPrefs.Level1, 100, medium.gameObject));
+            hard.onClick.AddListener(() => ChangeMap(planets[2], SettingsPrefs.Level2, 1000, hard.gameObject));
         }
         
         private void ChangeMap(PlanetSettings planet)
@@ -142,9 +148,12 @@ namespace Main
             {
                 Spawner.planetSettings = planet;
                 if (AdsManager.GetInstance.IsInterstitialLoaded)
-                    AdsManager.GetInstance.ShowInterstitial(() => ChangeScene(1));
+                    AdsManager.GetInstance.ShowInterstitial(() => { ChangeScene(1); AdsManager.GetInstance.DestroyBanner(); });
                 else
+                {
+                    AdsManager.GetInstance.DestroyBanner();
                     ChangeScene(1);
+                }
                 return;
             }
             obj.transform.GetChild(2).gameObject.SetActive(false);
@@ -194,7 +203,7 @@ namespace Main
                     SettingsPrefs.SavePrefs(prefs, SettingsPrefs.GetUpdatePrefs(prefs) + 1);
                     StarManager.AddStars(-price);
                     RefreshCoins();
-                    ButtonUpgrade(btn, prefs, txt);
+                    ConfigureUpdate();
                 });
             }
             else

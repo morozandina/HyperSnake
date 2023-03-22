@@ -9,7 +9,8 @@ namespace Game.Spawner
         
         private void OnCollisionEnter(Collision collision)
         {
-            if (!collision.gameObject.CompareTag("Obstacle")) return;
+            if (!collision.gameObject.CompareTag("Obstacle") && !collision.gameObject.CompareTag("Apple") &&
+                !collision.gameObject.CompareTag("ObstacleDestroy")) return;
             
             gameObject.SetActive(false);
             if (isStar)

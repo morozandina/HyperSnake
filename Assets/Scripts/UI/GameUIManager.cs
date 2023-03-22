@@ -129,17 +129,8 @@ namespace UI
             exit.onClick.RemoveAllListeners();
             exit.onClick.AddListener(() =>
             {
-                if (AdsManager.GetInstance.IsInterstitialLoaded)
-                {
-                    AdsManager.GetInstance.ShowInterstitial(() =>
-                    {
-                        lose.SetActive(false);
-                        onLose.Invoke(Exit);
-                    }); 
-                    return;
-                }
                 lose.SetActive(false);
-                onLose.Invoke(Exit);
+                onLose.Invoke(() => Exit(false));
             });
         }
 
@@ -162,13 +153,28 @@ namespace UI
         }
         
         // Exit
-        public void Exit()
+        public void Exit(bool state)
         {
             Sound.Instance.PlaySound(buttonSound);
             Sound.Instance.StopMusic();
             Time.timeScale = 1;
             SaveStars();
-            StartCoroutine(LoadLevel(0));
+            if (state)
+            {
+                if (AdsManager.GetInstance.IsInterstitialLoaded)
+                {
+                    AdsManager.GetInstance.ShowInterstitial(() =>
+                    {
+                        StartCoroutine(LoadLevel(0));
+                    }); 
+                    return;
+                }
+                StartCoroutine(LoadLevel(0));
+            }
+            else
+            {
+                StartCoroutine(LoadLevel(0));
+            }
         }
         
         // Score
