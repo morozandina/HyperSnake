@@ -8,7 +8,7 @@ Shader "Unlit/Gradient"
         _color2 ("Color_2", Color) = (0.5, 1, 1, 1)
     }
     SubShader {
-        Pass {        
+        Pass {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag

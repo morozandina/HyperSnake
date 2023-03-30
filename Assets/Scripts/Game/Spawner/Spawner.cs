@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Game.Meteor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Game.Spawner
@@ -12,7 +10,7 @@ namespace Game.Spawner
     {
         public AudioClip[] backgroundMusic;
         public static PlanetSettings planetSettings;
-        public static Action<GameObject> AppleSpawn;
+        public static Action<GameObject, bool> AppleSpawn;
         public static Action<GameObject> PropsSpawn;
         private Transform _planet, _decals;
         public Material planetMaterial;
@@ -107,7 +105,7 @@ namespace Game.Spawner
             addSpawn.transform.rotation = Quaternion.FromToRotation(addSpawn.transform.up, spawnRotation) * addSpawn.transform.rotation;
         }
 
-        private void SpawnApple(GameObject apple)
+        private void SpawnApple(GameObject apple, bool state)
         {
             apple.SetActive(false);
             // Starting Point (Planet Center)
@@ -125,6 +123,7 @@ namespace Game.Spawner
             // Spawn And Rotate into Place
             apple.transform.position = spawnPoint;
             apple.transform.rotation = Quaternion.FromToRotation(apple.transform.up, spawnRotation) * apple.transform.rotation;
+            apple.transform.GetChild(0).GetComponent<Powers.AppleShow>().UsePower(state);
             apple.SetActive(true);
         }
         

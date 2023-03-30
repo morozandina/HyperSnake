@@ -5405,7 +5405,10 @@ MonoBehaviour:
   bodySpeed: 4
   eatFx: {fileID: 3300175807242694973, guid: 312f44d0a90fa4c2aa238556e79253d3, type: 3}
   snakeDestroyFx: {fileID: 3300175807242694973, guid: 2d636a9d80a3349ddbdf0dff113bf822, type: 3}
-  objectDestroyFx: {fileID: 3300175807242694973, guid: 9931801dc59584463ab14e04060322c1, type: 3}
+  objectDestroyFx:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   shieldFx: {fileID: 1524238619}
 --- !u!114 &963370406
 MonoBehaviour:

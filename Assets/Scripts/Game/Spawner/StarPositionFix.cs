@@ -14,7 +14,7 @@ namespace Game.Spawner
             
             gameObject.SetActive(false);
             if (isStar)
-                Spawner.AppleSpawn?.Invoke(gameObject);
+                Spawner.AppleSpawn?.Invoke(gameObject, false);
             else
                 Spawner.PropsSpawn?.Invoke(gameObject);
         }

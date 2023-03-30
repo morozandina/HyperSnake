@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game;
+using Game.Powers;
 using Game.Spawner;
 using Main;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 using Random = UnityEngine.Random;
 
 namespace Snake
@@ -48,7 +50,7 @@ namespace Snake
         [Header("Visual")]
         [SerializeField] private ParticleSystem eatFx;
         [SerializeField] private ParticleSystem snakeDestroyFx;
-        [SerializeField] private ParticleSystem objectDestroyFx;
+        [SerializeField] private ParticleSystem[] objectDestroyFx;
         [SerializeField] private ParticleSystem shieldFx;
 
         private bool _isDead;
@@ -160,7 +162,7 @@ namespace Snake
                 GrowSnake();
                 GetScore(100);
                 StarManager.AddApple(1);
-                Spawner.AppleSpawn?.Invoke(collision.gameObject);
+                Spawner.AppleSpawn?.Invoke(collision.gameObject, isShowing);
                 Sound.Instance.PlaySound(appleEat[Random.Range(0, appleEat.Length)]);
                 walkSpeed += .01f;
                 bodySpeed += .01f;
@@ -169,7 +171,8 @@ namespace Snake
             }
             if (collision.gameObject.CompareTag("ObstacleDestroy"))
             {
-                Instantiate(objectDestroyFx, collision.transform.position, collision.transform.rotation);
+                Instantiate(objectDestroyFx[0], collision.transform.position, collision.transform.rotation);
+                Instantiate(objectDestroyFx[1], collision.transform.position, collision.transform.rotation);
                 Sound.Instance.PlaySound(hit);
                 GetScore(50);
                 GetRandomFromProps();
@@ -179,7 +182,8 @@ namespace Snake
             {
                 if (_isCanBreak)
                 {
-                    Instantiate(objectDestroyFx, collision.transform.position, collision.transform.rotation);
+                    Instantiate(objectDestroyFx[0], collision.transform.position, collision.transform.rotation);
+                    Instantiate(objectDestroyFx[1], collision.transform.position, collision.transform.rotation);
                     Sound.Instance.PlaySound(hit);
                     Spawner.PropsSpawn?.Invoke(collision.gameObject);
                     GetScore(500);
@@ -258,9 +262,10 @@ namespace Snake
 
         #region Super
 
-        private Coroutine _shieldCoroutine, _speedCoroutine;
+        private Coroutine _shieldCoroutine, _speedCoroutine, _appleShowCoroutine;
         private void Shield(int time) => _shieldCoroutine ??= StartCoroutine(StartShield(time));
         private void Speed(int time) => _speedCoroutine ??= StartCoroutine(StartSpeed(time));
+        private void ShowApple(int time) => _appleShowCoroutine ??= StartCoroutine(StartAppleShow(time));
 
         private IEnumerator StartShield(int time)
         {
@@ -292,23 +297,39 @@ namespace Snake
             _speedCoroutine = null;
         }
 
+        private bool isShowing = false;
+        private IEnumerator StartAppleShow(int time)
+        {
+            var plus = SettingsPrefs.GetUpdatePrefs(SettingsPrefs.Powers);
+            GameUIManager.Instance.AppleTimer(time + plus);
+            AppleShow.UseViewPower?.Invoke(true);
+            isShowing = true;
+            yield return new WaitForSeconds(time + plus);
+            isShowing = false;
+            AppleShow.UseViewPower?.Invoke(false);
+            _appleShowCoroutine = null;
+        }
+
         #endregion
 
         private void GetRandomFromProps()
         {
             var x = Random.Range(0, 100);
-            if (x > 80)
+            if (x > 70)
             {
                 Sound.Instance.PlaySound(abilityCollect);
                 switch (x)
                 {
-                    case < 90:
+                    case < 75:
                         Shield(5);
                         break;
-                    case >= 90 and < 97:
+                    case >= 75 and < 80:
                         Speed(5);
                         break;
-                    case > 97:
+                    case >= 90 and < 97:
+                        ShowApple(5);
+                        break;
+                    case >= 97:
                         GetScore(5000);
                         GrowSnake();
                         GrowSnake();

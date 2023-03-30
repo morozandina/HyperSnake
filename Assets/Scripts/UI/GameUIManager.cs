@@ -29,12 +29,14 @@ namespace UI
         [SerializeField] private GameObject lose;
         [SerializeField] private GameObject shield;
         [SerializeField] private GameObject super;
+        [SerializeField] private GameObject showApple;
 
         [Header("Text: ")]
         [SerializeField] private TextMeshProUGUI score;
         [SerializeField] private TextMeshProUGUI bestScore;
         [SerializeField] private TextMeshProUGUI shieldTimer;
         [SerializeField] private TextMeshProUGUI superTimer;
+        [SerializeField] private TextMeshProUGUI showAppleTimer;
         [SerializeField] private TextMeshProUGUI stars;
 
         [Header("Lose: ")]
@@ -203,6 +205,12 @@ namespace UI
         public void SuperTimer(int time)
         {
             StartCoroutine(Timer(super, time, superTimer));
+        }
+
+        public void AppleTimer(int time)
+        {
+            StartCoroutine(Timer(showApple, time, showAppleTimer));
+
         }
 
         private static IEnumerator Timer(int time, TMP_Text txt)
